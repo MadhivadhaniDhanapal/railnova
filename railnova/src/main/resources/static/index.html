@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>RailNova - Smart Railway Reservation</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f5f7fb;
+            color: #222;
+        }
+
+        header {
+            background: #12355b;
+            color: white;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 25px;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #12355b, #1d70a2);
+            color: white;
+            text-align: center;
+            padding: 70px 20px 100px;
+        }
+
+        .hero h1 {
+            font-size: 45px;
+            margin-bottom: 15px;
+        }
+
+        .hero p {
+            font-size: 18px;
+        }
+
+        .search-box {
+            background: white;
+            color: #222;
+            max-width: 950px;
+            margin: -55px auto 40px;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .search-box h2 {
+            margin-bottom: 20px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        input,
+        select {
+            flex: 1;
+            min-width: 180px;
+            padding: 14px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+
+        button {
+            padding: 14px 25px;
+            border: none;
+            border-radius: 8px;
+            background: #ff9800;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #e68900;
+        }
+
+        .features {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 30px 20px;
+            text-align: center;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .card h3 {
+            margin: 15px 0 10px;
+        }
+
+        .train-card {
+            background: #ffffff;
+            margin-top: 20px;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .train-card h3 {
+            color: #12355b;
+            margin-bottom: 12px;
+        }
+
+        .train-card p {
+            margin: 8px 0;
+        }
+
+        .train-card button {
+            margin-top: 15px;
+        }
+
+        .ai-section {
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 35px;
+            text-align: center;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .ai-section button {
+            margin-top: 20px;
+        }
+
+        #bookingHistory {
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        #bookingHistory .train-card {
+            border-left: 5px solid #1d70a2;
+        }
+
+        footer {
+            margin-top: 60px;
+            background: #12355b;
+            color: white;
+            text-align: center;
+            padding: 25px;
+        }
+
+        #message {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        #bookingMessage {
+            margin-top: 20px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<header>
+
+    <div class="logo">🚆 RailNova</div>
+
+    <nav>
+        <a href="#">Home</a>
+        <a href="#myBookings">My Bookings</a>
+        <a href="#login">Login</a>
+        <a href="#register">Register</a>
+    </nav>
+
+</header>
+
+
+<section class="hero">
+
+    <h1>Travel Smarter with RailNova</h1>
+
+    <p>
+        Smart Railway Reservation with Personalized Travel Assistance
+    </p>
+
+</section>
+
+
+<section class="search-box">
+
+    <h2>🔎 Search Trains</h2>
+
+    <div class="form-row">
+
+        <input
+            type="text"
+            id="source"
+            placeholder="From">
+
+        <input
+            type="text"
+            id="destination"
+            placeholder="To">
+
+        <input
+            type="date"
+            id="travelDate">
+
+        <button onclick="searchTrains()">
+            Search
+        </button>
+
+    </div>
+
+    <div id="message"></div>
+
+    <div id="trainResults"></div>
+
+</section>
+
+
+<section class="features">
+
+    <div class="card">
+
+        <div style="font-size:40px;">🎫</div>
+
+        <h3>Easy Booking</h3>
+
+        <p>
+            Search and reserve railway tickets easily.
+        </p>
+
+    </div>
+
+
+    <div class="card">
+
+        <div style="font-size:40px;">🪑</div>
+
+        <h3>Smart Seat Selection</h3>
+
+        <p>
+            Get suitable berth and nearby seat recommendations.
+        </p>
+
+    </div>
+
+
+    <div class="card">
+
+        <div style="font-size:40px;">👨‍👩‍👧‍👦</div>
+
+        <h3>Group Booking</h3>
+
+        <p>
+            Prioritize nearby seats for family and group passengers.
+        </p>
+
+    </div>
+
+
+    <div class="card">
+
+        <div style="font-size:40px;">🔄</div>
+
+        <h3>Alternative Trains</h3>
+
+        <p>
+            Find alternative trains when a train is cancelled.
+        </p>
+
+    </div>
+
+</section>
+<!-- REGISTER -->
+
+<section class="ai-section" id="register">
+
+    <h2>📝 Create Your RailNova Account</h2>
+
+    <p>Register to book trains and manage your bookings.</p>
+
+    <br>
+
+    <input type="text" id="registerName" placeholder="Full Name">
+
+    <br><br>
+
+    <input type="email" id="registerEmail" placeholder="Email">
+
+    <br><br>
+
+    <input type="password" id="registerPassword" placeholder="Password">
+
+    <br><br>
+
+    <button onclick="registerUser()">
+        Register
+    </button>
+
+    <p id="registerMessage"></p>
+
+</section>
+<!-- LOGIN -->
+
+<section class="ai-section" id="login">
+
+    <h2>🔐 RailNova Login</h2>
+
+    <p>Login to access your bookings and travel history.</p>
+
+    <br>
+
+    <input type="email" id="loginEmail" placeholder="Email">
+
+    <br><br>
+
+    <input type="password" id="loginPassword" placeholder="Password">
+
+    <br><br>
+
+    <button onclick="loginUser()">
+        Login
+    </button>
+
+    <p id="loginMessage"></p>
+
+</section>
+<!-- MY BOOKINGS -->
+
+<section class="ai-section" id="myBookings">
+
+    <h2>📋 My Bookings</h2>
+
+    <p>
+        View your previous RailNova bookings and PNR details.
+    </p>
+
+    <button onclick="loadBookings()">
+        View My Bookings
+    </button>
+
+    <div id="bookingHistory"></div>
+
+</section>
+
+
+<!-- AI ASSISTANT -->
+
+<section class="ai-section">
+
+    <h2>🤖 RailNova AI Assistant</h2>
+
+    <p>
+        Get personalized train recommendations based on
+        your travel history and preferences.
+    </p>
+
+    <button onclick="openAI()">
+        Ask RailNova AI
+    </button>
+
+    <p id="aiMessage"></p>
+
+</section>
+
+
+<footer>
+
+    <p>
+        © 2026 RailNova | Smart Railway Reservation System
+    </p>
+
+</footer>
+
+
+<script>
+
+function registerUser() {
+
+    let name = document.getElementById("registerName").value;
+    let email = document.getElementById("registerEmail").value;
+    let password = document.getElementById("registerPassword").value;
+
+    if (name === "" || email === "" || password === "") {
+        document.getElementById("registerMessage").innerText =
+            "Please fill all details.";
+        return;
+    }
+
+    let userData = {
+        name: name,
+        email: email,
+        password: password
+    };
+
+    fetch("/api/users", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(userData)
+    })
+    .then(response => response.json())
+    .then(user => {
+
+        document.getElementById("registerMessage").innerText =
+            "✅ Registration successful!";
+
+    })
+    .catch(error => {
+
+        document.getElementById("registerMessage").innerText =
+            "❌ Registration failed.";
+
+    });
+}
+function loginUser() {
+
+    let email = document.getElementById("loginEmail").value;
+    let password = document.getElementById("loginPassword").value;
+
+    if (email === "" || password === "") {
+        document.getElementById("loginMessage").innerText =
+            "Please enter email and password.";
+        return;
+    }
+
+    let loginData = {
+        email: email,
+        password: password
+    };
+
+    fetch("/api/users/login", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(loginData)
+    })
+    .then(response => response.json())
+    .then(user => {
+
+        if (user) {
+            document.getElementById("loginMessage").innerText =
+                "✅ Login successful! Welcome " + "✅ Login successful!";
+        } else {
+            document.getElementById("loginMessage").innerText =
+                "❌ Invalid email or password.";
+        }
+
+    })
+    .catch(error => {
+
+        document.getElementById("loginMessage").innerText =
+            "❌ Login failed.";
+
+    });
+}
+/* SEARCH TRAINS */
+
+function searchTrains() {
+
+    let source =
+        document.getElementById("source").value;
+
+    let destination =
+        document.getElementById("destination").value;
+
+    let date =
+        document.getElementById("travelDate").value;
+
+    let resultsDiv =
+        document.getElementById("trainResults");
+
+
+    if (source === "" ||
+        destination === "" ||
+        date === "") {
+
+        resultsDiv.innerHTML =
+            "<p>Please enter From, To and Travel Date.</p>";
+
+        return;
+    }
+
+
+    fetch("/api/trains")
+
+        .then(response => response.json())
+
+        .then(trains => {
+            window.selectedSource = source;
+window.selectedDestination = destination;
+
+            let results = trains.filter(train =>
+
+                train.source.toLowerCase() ===
+                source.toLowerCase() &&
+
+                train.destination.toLowerCase() ===
+                destination.toLowerCase()
+
+            );
+
+
+            if (results.length === 0) {
+
+                resultsDiv.innerHTML =
+                    "<p>No trains found for this route.</p>";
+
+                return;
+            }
+
+
+            resultsDiv.innerHTML = "";
+
+
+            results.forEach(train => {
+
+                resultsDiv.innerHTML += `
+
+                    <div class="train-card">
+
+                        <h3>
+                            🚆 ${train.trainName}
+                        </h3>
+
+                        <p>
+                            <b>Train No:</b>
+                            ${train.trainNumber}
+                        </p>
+
+                        <p>
+                            <b>Route:</b>
+                            ${train.source}
+                            →
+                            ${train.destination}
+                        </p>
+
+                        <p>
+                            <b>Departure:</b>
+                            ${train.departureTime}
+                        </p>
+
+                        <p>
+                            <b>Arrival:</b>
+                            ${train.arrivalTime}
+                        </p>
+
+                        <p>
+                            <b>Available Seats:</b>
+                            ${train.availableSeats}
+                        </p>
+
+                        <button
+                            onclick="bookTrain(${train.id})">
+
+                            Book Now
+
+                        </button>
+
+                    </div>
+
+                `;
+
+            });
+
+        })
+
+        .catch(error => {
+
+            resultsDiv.innerHTML =
+                "<p>Unable to connect to RailNova server.</p>";
+
+        });
+
+}
+
+
+/* BOOK TRAIN */
+
+function bookTrain(trainId) {
+
+    document.getElementById("trainResults").innerHTML = `
+
+        <div class="train-card">
+
+            <h2>🎫 Passenger Details</h2>
+
+            <br>
+
+            <input
+                type="text"
+                id="passengerName"
+                placeholder="Passenger Name">
+
+            <br><br>
+
+            <input
+                type="number"
+                id="passengerAge"
+                placeholder="Age">
+
+            <br><br>
+
+            <input
+                type="number"
+                id="passengerCount"
+                placeholder="Number of Passengers"
+                min="1"
+                max="100">
+
+            <br>
+
+            <button
+                onclick="continueBooking(${trainId})">
+
+                Continue Booking
+
+            </button>
+
+            <p id="bookingMessage"></p>
+
+        </div>
+
+    `;
+
+}
+
+
+/* CONTINUE BOOKING */
+
+function continueBooking(trainId) {
+
+    let name =
+        document.getElementById("passengerName").value;
+
+    let age =
+        parseInt(
+            document.getElementById("passengerAge").value
+        );
+
+    let count =
+        parseInt(
+            document.getElementById("passengerCount").value
+        );
+
+
+    if (name === "" ||
+        isNaN(age) ||
+        isNaN(count)) {
+
+        document.getElementById("bookingMessage").innerText =
+            "Please enter all passenger details.";
+
+        return;
+    }
+
+
+    let berth;
+
+
+    if (age <= 12 || age >= 60) {
+
+        berth = "Lower Berth";
+
+    } else {
+
+        berth = "Middle Berth";
+
+    }
+
+
+    document.getElementById("bookingMessage").innerHTML = `
+
+        <h3>✅ Passenger Details Saved</h3>
+
+        <p>
+            <b>Name:</b> ${name}
+        </p>
+
+        <p>
+            <b>Age:</b> ${age}
+        </p>
+
+        <p>
+            <b>Passengers:</b> ${count}
+        </p>
+
+        <p>
+            <b>Recommended Berth:</b> ${berth}
+        </p>
+
+        <button
+            onclick="confirmBooking(${trainId})">
+
+            Confirm Booking
+
+        </button>
+
+    `;
+
+}
+
+
+/* CONFIRM BOOKING */
+
+function confirmBooking(trainId) {
+
+    let name =
+        document.getElementById("passengerName").value;
+
+    let age =
+        parseInt(
+            document.getElementById("passengerAge").value
+        );
+
+    let count =
+        parseInt(
+            document.getElementById("passengerCount").value
+        );
+
+
+    let today =
+        new Date().toISOString().split("T")[0];
+
+
+    let bookingData = {
+
+        userId: 1,
+
+        trainId: trainId,
+
+        travelDate: today,
+
+        totalPassengers: count,
+
+        passengerName: name,
+
+        passengerAge: age,
+
+        status: "CONFIRMED"
+
+    };
+
+
+    fetch("/api/bookings", {
+
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify(bookingData)
+
+    })
+
+    .then(response => response.json())
+
+    .then(booking => {
+
+        document.getElementById("bookingMessage").innerHTML = `
+
+            <h3>🎉 Booking Confirmed!</h3>
+
+            <p>
+                <b>PNR:</b> ${booking.pnr}
+            </p>
+
+            <p>
+                <b>Passenger:</b> ${name}
+            </p>
+
+            <p>
+                <b>Age:</b> ${age}
+            </p>
+
+            <p>
+                <b>Passengers:</b> ${count}
+            </p>
+
+            <p>
+                <b>Status:</b> ${booking.status}
+            </p>
+
+            <br>
+
+            <button onclick="loadBookings()">
+                View My Bookings
+            </button>
+
+        `;
+
+    })
+
+    .catch(error => {
+
+        document.getElementById("bookingMessage").innerText =
+            "Booking failed. Please try again.";
+
+    });
+
+}
+
+
+/* BOOKING HISTORY */
+
+function loadBookings() {
+
+    let historyDiv =
+        document.getElementById("bookingHistory");
+
+
+    historyDiv.innerHTML =
+        "<p>Loading bookings...</p>";
+
+
+    fetch("/api/bookings")
+
+        .then(response => response.json())
+
+        .then(bookings => {
+
+
+            if (bookings.length === 0) {
+
+                historyDiv.innerHTML =
+                    "<p>No bookings found.</p>";
+
+                return;
+            }
+
+
+            historyDiv.innerHTML = "";
+
+
+            bookings.forEach(booking => {
+
+                historyDiv.innerHTML += `
+
+                    <div class="train-card">
+
+                        <h3>🎫 Booking Details</h3>
+
+                        <p>
+                            <b>PNR:</b>
+                            ${booking.pnr}
+                        </p>
+
+                        <p>
+                            <b>Passenger:</b>
+                            ${booking.passengerName}
+                        </p>
+
+                        <p>
+                            <b>Age:</b>
+                            ${booking.passengerAge}
+                        </p>
+
+                        <p>
+                            <b>Travel Date:</b>
+                            ${booking.travelDate}
+                        </p>
+
+                        <p>
+                            <b>Passengers:</b>
+                            ${booking.totalPassengers}
+                        </p>
+
+                        <p>
+                            <b>Train ID:</b>
+                            ${booking.trainId}
+                        </p>
+
+                        <p>
+                            <b>Status:</b>
+                            ${booking.status}
+                        </p>
+                        ${booking.status === "CONFIRMED"
+    ? `<button onclick="cancelBooking(${booking.id})">
+        ❌ Cancel Booking
+       </button>`
+    : ""
+}
+
+                    </div>
+
+                `;
+
+            });
+
+        })
+
+        .catch(error => {
+
+            historyDiv.innerHTML =
+                "<p>Unable to load booking history.</p>";
+
+        });
+
+}
+
+function cancelBooking(bookingId) {
+
+    fetch(`/api/bookings/${bookingId}/cancel`, {
+        method: "PUT"
+    })
+    .then(response => response.json())
+    .then(booking => {
+
+        alert("✅ Booking cancelled successfully!");
+
+        loadBookings();
+
+        // Get complete booking details
+        return fetch("/api/bookings");
+    })
+    .then(response => response.json())
+    .then(bookings => {
+
+        let cancelledBooking = bookings.find(
+            b => Number(b.id) === Number(bookingId)
+        );
+
+        if (!cancelledBooking) {
+            alert("ℹ️ Booking details not found.");
+            return;
+        }
+
+        return fetch("/api/trains")
+            .then(response => response.json())
+            .then(trains => ({
+                booking: cancelledBooking,
+                trains: trains
+            }));
+
+    })
+    .then(data => {
+
+        if (!data) return;
+
+        let booking = data.booking;
+        let trains = data.trains;
+
+        let cancelledTrain = trains.find(
+            train => Number(train.id) === Number(booking.trainId)
+        );
+
+        if (!cancelledTrain) {
+            alert("ℹ️ Cancelled train details not found.");
+            return;
+        }
+
+        // Dynamic route matching — no hard-coded cities
+        let alternatives = trains.filter(train =>
+            Number(train.id) !== Number(booking.trainId) &&
+            String(train.source).trim().toLowerCase() ===
+                String(cancelledTrain.source).trim().toLowerCase() &&
+            String(train.destination).trim().toLowerCase() ===
+                String(cancelledTrain.destination).trim().toLowerCase() &&
+            Number(train.availableSeats) > 0 &&
+            train.status === "RUNNING"
+        );
+
+        if (alternatives.length > 0) {
+
+            let message =
+                "🚆 Alternative trains available:\n\n";
+
+            alternatives.forEach(train => {
+
+                message +=
+                    "🚆 " + train.trainNumber +
+                    " - " + train.trainName +
+                    "\nDeparture: " + train.departureTime +
+                    "\nAvailable Seats: " +
+                    train.availableSeats +
+                    "\n\n";
+            });
+
+            alert(message);
+
+        } else {
+
+            alert(
+                "ℹ️ No alternative trains available on this route."
+            );
+
+        }
+
+    })
+    .catch(error => {
+
+        console.error(error);
+
+        alert("❌ Cancellation/alternative train check failed.");
+
+    });
+
+}
+/* AI ASSISTANT */
+
+function openAI() {
+
+    let source = window.selectedSource;
+    let destination = window.selectedDestination;
+
+    if (!source || !destination) {
+
+        document.getElementById("aiMessage").innerText =
+            "Please search for a train route first.";
+
+        return;
+    }
+
+    fetch("/api/trains")
+        .then(response => response.json())
+        .then(trains => {
+
+            let routeTrains = trains.filter(train =>
+                String(train.source).toLowerCase() ===
+                    String(source).toLowerCase() &&
+                String(train.destination).toLowerCase() ===
+                    String(destination).toLowerCase() &&
+                Number(train.availableSeats) > 0 &&
+                train.status === "RUNNING"
+            );
+
+            if (routeTrains.length === 0) {
+
+                document.getElementById("aiMessage").innerText =
+                    "No suitable trains found for this route.";
+
+                return;
+            }
+
+            let nightTrains = routeTrains.filter(train =>
+                train.departureTime >= "18:00:00"
+            );
+
+            let recommendedTrain =
+                nightTrains.length > 0
+                    ? nightTrains[0]
+                    : routeTrains[0];
+
+            let voiceText =
+                "RailNova AI recommends " +
+                recommendedTrain.trainName +
+                " from " +
+                recommendedTrain.source +
+                " to " +
+                recommendedTrain.destination +
+                ". Train number " +
+                recommendedTrain.trainNumber +
+                ". Departure time " +
+                recommendedTrain.departureTime +
+                ". This train matches your preferred travel time.";
+
+            let speech =
+                new SpeechSynthesisUtterance(voiceText);
+
+            speech.lang = "en-IN";
+            speech.rate = 0.9;
+
+            window.speechSynthesis.speak(speech);
+
+            document.getElementById("aiMessage").innerHTML = `
+
+                <h3>🤖 RailNova AI Recommendation</h3>
+
+                <p>
+                    Based on your travel preference,
+                    RailNova recommends:
+                </p>
+
+                <div class="train-card">
+
+                    <h3>🚆 ${recommendedTrain.trainName}</h3>
+
+                    <p>
+                        <b>Train Number:</b>
+                        ${recommendedTrain.trainNumber}
+                    </p>
+
+                    <p>
+                        <b>Route:</b>
+                        ${recommendedTrain.source}
+                        →
+                        ${recommendedTrain.destination}
+                    </p>
+
+                    <p>
+                        <b>Departure:</b>
+                        ${recommendedTrain.departureTime}
+                    </p>
+
+                    <p>
+                        <b>Available Seats:</b>
+                        ${recommendedTrain.availableSeats}
+                    </p>
+
+                    <p>
+                        🌙 Recommended because it matches
+                        your preferred travel time.
+                    </p>
+
+                </div>
+
+            `;
+
+        })
+        .catch(error => {
+
+            document.getElementById("aiMessage").innerText =
+                "AI recommendation unavailable.";
+
+        });
+
+}
+       
+
+
+
+</script>
+
+
+</body>
+
+</html>
